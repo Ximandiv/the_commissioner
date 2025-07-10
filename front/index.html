@@ -1,0 +1,117 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC - Dashboard</title>
+    <link rel="stylesheet" href="index_header.css">
+    <link rel="stylesheet" href="index_nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index_table.css">
+    <link rel="stylesheet" href="index_table_buttons.css">
+</head>
+<body>
+    <header>
+        <ul>
+            <li class="hamburger_menu">
+                <button>&equiv;</button>
+            </li>
+            <li class="user_profile">Pepito</li>
+            <li class="user_profile options">
+                <button><i class="fa-solid fa-chevron-down"></i></button>
+            </li>
+        </ul>
+    </header>
+
+    <nav>
+        <div class="logo">
+            <h1>The Commissioner</h1>
+            <button>&equiv;</button>
+        </div>
+
+        <ul>
+            <li>
+                <a href="" class="active">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="inactive">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Configuración</span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="inactive">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <main>
+        <div class="table-actions">
+            <div class="table-filters">
+                <button type="button" class="filter-icon filter-hover">
+                    <i class="fa-solid fa-filter"></i>
+                </button>
+                <div class="filter-actions filter-actions-hidden">
+                    <button type="button" disabled>
+                        <i class="fa-solid fa-calendar"></i>
+                         Reciente
+                    </button>
+                    <button type="button" class="last" disabled>
+                        <i class="fa-solid fa-check"></i>
+                         En Progreso
+                    </button>
+                </div>
+            </div>
+            <div class="table-buttons">
+                <button class="create" type="button">Crear</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Dirección de Entrega</th>
+                    <th>Fecha de Entrega</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>Llavero Gato</td>
+                    <td>N/A</td>
+                    <td>07/07/25 12:00PM</td>
+                    <td>En Progreso</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Llavero Gato</td>
+                    <td>N/A</td>
+                    <td>07/07/25 12:00PM</td>
+                    <td>En Progreso</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Llavero Gato</td>
+                    <td>N/A</td>
+                    <td>07/07/25 12:00PM</td>
+                    <td>En Progreso</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+</body>
+
+<script src="header_script.js"></script>
+<script src="filter_icon.js"></script>
+</html>

@@ -1,0 +1,31 @@
+.actions{
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+}
+
+table .actions button{
+    width: 100px;
+    padding: 8px;
+    border: 0;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+table .actions .ver-com{
+    background-color: rgb(222, 225, 255);
+}
+
+table .actions .elim-com{
+    color: white;
+    background-color: rgb(223, 124, 124);
+}
+
+table .actions .ver-com:hover{
+    background-color: rgb(180, 185, 233);
+}
+
+table .actions .elim-com:hover{
+    background-color: rgb(180, 70, 70);
+}

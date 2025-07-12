@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="index_table.css">
     <link rel="stylesheet" href="index_table_buttons.css">
+    <link rel="stylesheet" href="index_table_actions.css">
 </head>
 <body>
     <header>
@@ -81,6 +82,7 @@
                     <th>Dirección de Entrega</th>
                     <th>Fecha de Entrega</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,6 +92,12 @@
                     <td>N/A</td>
                     <td>07/07/25 12:00PM</td>
                     <td>En Progreso</td>
+                    <td>
+                        <div class="actions">
+                            <button type="button" class="ver-com">Ver</button>
+                            <button type="button" class="elim-com">Eliminar</button>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>1</td>
@@ -97,6 +105,12 @@
                     <td>N/A</td>
                     <td>07/07/25 12:00PM</td>
                     <td>En Progreso</td>
+                    <td>
+                        <div class="actions">
+                            <button type="button" class="ver-com">Ver</button>
+                            <button type="button" class="elim-com">Eliminar</button>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>2</td>
@@ -104,6 +118,12 @@
                     <td>N/A</td>
                     <td>07/07/25 12:00PM</td>
                     <td>En Progreso</td>
+                    <td>
+                        <div class="actions">
+                            <button type="button" class="ver-com">Ver</button>
+                            <button type="button" class="elim-com">Eliminar</button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -114,4 +134,5 @@
 
 <script src="header_script.js"></script>
 <script src="filter_icon.js"></script>
+<script src="delete_com.js"></script>
 </html>

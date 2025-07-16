@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="index_table.css">
     <link rel="stylesheet" href="index_table_buttons.css">
     <link rel="stylesheet" href="index_table_actions.css">
+    <link rel="stylesheet" href="index_modal.css">
 </head>
 <body>
     <header>
@@ -70,7 +71,25 @@
                 </div>
             </div>
             <div class="table-buttons">
-                <button class="create" type="button">Crear</button>
+                <button class="create" id="create" type="button">Crear</button>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Crear Comision</h3>
+                <form id="create-form">
+                    <label for="name">Nombre de Comision</label>
+                    <input type="text" name="name" id="name">
+                    <span id="name-errors" style="color: red;"></span>
+
+                    <label for="deadline">Fecha de Entrega</label>
+                    <input type="date" name="deadline" id="deadline">
+                    <span id="date-errors" style="color: red;"></span>
+
+                    <button type="submit">Confirmar</button>
+                </form>
             </div>
         </div>
 
@@ -135,4 +154,5 @@
 <script src="header_script.js"></script>
 <script src="filter_icon.js"></script>
 <script src="delete_com.js"></script>
+<script src="create_com.js"></script>
 </html>

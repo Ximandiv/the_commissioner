@@ -7,8 +7,11 @@ const closeBtn = document.getElementsByClassName('close')[0];
 const creationForm = modal.querySelector(".modal-content #create-form");
 const nameError = creationForm.querySelector("#name-errors");
 const dateError = creationForm.querySelector("#date-errors");
+const addressError = creationForm.querySelector("#address-errors");
+
 const comName = creationForm.querySelector("#name");
 const comDate = creationForm.querySelector("#deadline");
+const comAddress = creationForm.querySelector("#address");
 
 const confirmCreation = creationForm.querySelector("button");
 
@@ -31,13 +34,20 @@ confirmCreation.onclick = function(event) {
 
     nameError.textContent = "";
     dateError.textContent = "";
+    addressError.textContent = "";
 
     const comNameValue = comName.value.trim();
     const comDateValue = comDate.value;
+    const comAddressValue = comAddress.value;
     let errorsFound = false;
 
     if(comNameValue.length >= 100 || comNameValue.length === 0){
         nameError.textContent = "Nombre no puede ser igual o mayor a 100 caracteres ni estar vacio";
+        errorsFound = true;
+    }
+
+    if(comAddressValue.length >= 60 || comAddressValue.length === 0){
+        addressError.textContent = "Direccion no puede ser vacia o ser mayor o igual a 60 caracteres";
         errorsFound = true;
     }
 
@@ -66,9 +76,29 @@ confirmCreation.onclick = function(event) {
         return;
     }
 
-    console.log("yay funciono");
+    sendToAPI(comNameValue, comDateValue, comAddressValue);
 }
 
-function sendComCreation(name, deadline){
+async function sendToAPI(name, deadline, address) {
+    const payload = {
+        name: name,
+        deliveryAddress: address,
+        deadlineAt: deadline
+    };
+    
+    const response = await fetch('https://localhost:7117/Commission', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
 
+    if(!response.ok){
+        throw new Error(`HTTP error during creation! status: ${response.status}`);
+    }
+
+    console.log("Yay! you created a commission");
+
+    return response.json();
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using TC_API.Database;
 using TC_API.Models;
 
@@ -31,15 +32,28 @@ public class CommissionController : ControllerBase
     {
         if(string.IsNullOrEmpty(request.Name))
             return BadRequest("Commission name cannot be empty.");
-        if(request.DeadlineAt < DateTime.UtcNow)
-            return BadRequest("Deadline cannot be in the past.");
+        else if(request.Name.Length >= 100)
+            return BadRequest("Commission name cannot be or exceed 100 characters.");
 
-        Commission commission = new(request);
+        var deadlineDate = DateOnly.TryParseExact(request.DeadlineAt,
+                                                  "yyyy-MM-dd",
+                                                  CultureInfo.InvariantCulture,
+                                                  DateTimeStyles.None,
+                                                  out var parsedDate)
+                            ? parsedDate
+                            : DateOnly.MinValue;
+        if (deadlineDate <= DateOnly.FromDateTime(DateTime.UtcNow)
+            || deadlineDate == DateOnly.MinValue)
+            return BadRequest("Deadline cannot be in same day or past.");
+
+        var commission = new Commission(request);
 
         _context.Commissions.Add(commission);
         _context.SaveChanges();
         _logger.LogInformation("Commission created: {CommissionId}", commission.Id);
 
-        return CreatedAtAction(nameof(GetCommissions), new { id = commission.Id }, commission);
+        var response = new CommissionResponse(commission);
+
+        return CreatedAtAction(nameof(GetCommissions), new { id = commission.Id }, response);
     }
 }

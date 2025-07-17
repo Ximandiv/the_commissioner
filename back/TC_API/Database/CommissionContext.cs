@@ -21,6 +21,10 @@ public class CommissionContext : DbContext
             .IsRequired()
             .HasMaxLength(100);
         modelBuilder.Entity<Commission>()
+            .Property(c => c.DeliveryAddress)
+            .IsRequired()
+            .HasMaxLength(60);
+        modelBuilder.Entity<Commission>()
             .Property(c => c.State)
             .HasConversion<string>();
     }

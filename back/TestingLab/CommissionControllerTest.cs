@@ -38,18 +38,16 @@ public class CommissionControllerTest
         var loggerMock = new Mock<ILogger<CommissionController>>();
         var controller = new CommissionController(loggerMock.Object, context);
 
-        var request = new CommissionRequest
-        {
-            Name = "Test Commission",
-            DeadlineAt = DateTime.UtcNow.AddDays(1)
-        };
+        var request = new CommissionRequest("Test Commission",
+            "123 Test St, Test City, TC 12345",
+            DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)).ToString("MM-dd-yyyy"));
 
         // Act
         var result = controller.CreateCommission(request);
 
         // Assert
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-        var commission = Assert.IsType<Commission>(createdResult.Value);
+        var commission = Assert.IsType<CommissionResponse>(createdResult.Value);
 
         Assert.Equal(request.Name, commission.Name);
         Assert.Equal(request.DeadlineAt, commission.DeadlineAt);

@@ -23,8 +23,16 @@ public class CommissionController : ControllerBase
     [HttpGet]
     public IActionResult GetCommissions()
     {
-        // This is a placeholder for the actual implementation.
-        return Ok(new List<string> { "Commission1", "Commission2" });
+        var commissions = _context.Commissions
+            .Select(c => new CommissionResponse(c))
+            .ToList();
+
+        if (commissions.Count == 0)
+            return NotFound("No commissions found.");
+
+        _logger.LogInformation("Retrieved {Count} commissions", commissions.Count);
+
+        return Ok(commissions);
     }
 
     [HttpPost]

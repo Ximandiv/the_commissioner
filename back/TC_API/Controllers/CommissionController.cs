@@ -21,18 +21,32 @@ public class CommissionController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetCommissions()
+    public IActionResult GetCommissions(int pageNumber = 1, int pageSize = 10)
     {
+        if (pageNumber < 1) pageNumber = 1;
+        if (pageSize < 1 || pageSize > 10) pageSize = 10;
+
+        var totalCount = _context.Commissions.Count();
+        if (totalCount == 0)
+            return NotFound("No commissions found.");
+
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
         var commissions = _context.Commissions
+            .OrderBy(c => c.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .Select(c => new CommissionResponse(c))
             .ToList();
 
-        if (commissions.Count == 0)
-            return NotFound("No commissions found.");
+        var response = new CommissionListResponse(
+            totalCount,
+            pageNumber,
+            pageSize,
+            totalPages,
+            commissions);
 
-        _logger.LogInformation("Retrieved {Count} commissions", commissions.Count);
-
-        return Ok(commissions);
+        return Ok(response);
     }
 
     [HttpPost]

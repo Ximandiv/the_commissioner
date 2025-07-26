@@ -1,0 +1,24 @@
+.pages-control{
+    margin-top: 20px;
+    display: flex;
+    width: 70%;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+}
+
+.pages-control button{
+    border: 0;
+    font-weight: bolder;
+    font-size: x-large;
+    padding: 10px;
+    background-color: rgb(255, 208, 208);
+    cursor: pointer;
+    transition: 0.3s ease;
+    z-index: 1;
+}
+
+.pages-control button:hover{
+    transform: scale(1.5);
+    background-color: rgb(209, 161, 161);
+}

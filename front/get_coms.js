@@ -1,25 +1,46 @@
+let currentPage = 1;
+let totalPages = 1;
 document.addEventListener("DOMContentLoaded", async function(){
-    await pollCommissions();
-    setInterval(pollCommissions, 5 * 60 * 1000)
+    await pollCommissions(currentPage);
+    setInterval(pollCommissions(currentPage), 5 * 60 * 1000)
+
+    document.getElementById("prevPage").addEventListener("click", async () => {
+        if (currentPage > 1) {
+            currentPage--;
+            await pollCommissions(currentPage);
+        }
+    });
+    document.getElementById("nextPage").addEventListener("click", async () => {
+        if(currentPage >= totalPages){
+            currentPage = totalPages;
+            return;
+        }
+        currentPage++;
+        await pollCommissions(currentPage);
+    });
 });
 
-export async function pollCommissions(){
+export async function pollCommissions(currentPage){
     try{
-        await getCommissionList();
+        await getCommissionList(currentPage);
+        document.getElementById("pageInfo").textContent = `Página ${currentPage} de ${totalPages}`;
     } catch (error){
         console.error(error);
     }
 }
 
-async function getCommissionList(){
+async function getCommissionList(currentPage){
+    const pageSize = 3;
     const tableContent = document.querySelector("table tbody");
-    const commissionList = await getFromAPI();
+    const commissionList = await getFromAPI(currentPage, pageSize);
+    console.log(commissionList);
+    totalPages = commissionList.totalPages;
 
     tableContent.replaceChildren();
-    commissionList.forEach(coms => {
+    commissionList.items.forEach(coms => {
         const tr = document.createElement("tr");
         const idData = document.createElement("td");
-        const nameData =document.createElement("td");
+        const nameData = document.createElement("td");
         const addressData = document.createElement("td");
         const deadlineData = document.createElement("td");
         const statusData = document.createElement("td");
@@ -59,8 +80,8 @@ async function getCommissionList(){
     });
 }
 
-async function getFromAPI(){
-    const response = await fetch('https://localhost:7117/Commission', {
+async function getFromAPI(currentPage, pageSize){
+    const response = await fetch(`https://localhost:7117/Commission?pageNumber=${currentPage}&pageSize=${pageSize}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

@@ -37,6 +37,7 @@ async function getCommissionList(currentPage){
     totalPages = commissionList.totalPages;
 
     tableContent.replaceChildren();
+    let commissionNumber = (currentPage - 1) * pageSize + 1;
     commissionList.items.forEach(coms => {
         const tr = document.createElement("tr");
         const idData = document.createElement("td");
@@ -44,13 +45,25 @@ async function getCommissionList(currentPage){
         const addressData = document.createElement("td");
         const deadlineData = document.createElement("td");
         const statusData = document.createElement("td");
+        const createdData = document.createElement("td");
+        const updatedData = document.createElement("td");
         const actionsData = document.createElement("td");
 
-        idData.textContent = coms.id;
+        const deadlineDate = new Date(coms.deadlineAt);
+        const createdDate = new Date(coms.createdAt);
+        const updatedDate = new Date(coms.updatedAt);
+
+        const deadlineDateCleaned = `${deadlineDate.getMonth() + 1}/${deadlineDate.getDate()}/${deadlineDate.getFullYear()}`;
+        const createdDateCleaned = `${createdDate.getMonth() + 1}/${createdDate.getDate()}/${createdDate.getFullYear()}`;
+        const updatedDateCleaned = `${updatedDate.getMonth() + 1}/${updatedDate.getDate()}/${updatedDate.getFullYear()}`;
+
+        idData.textContent = commissionNumber;
         nameData.textContent = coms.name;
         addressData.textContent = coms.deliveryAddress;
-        deadlineData.textContent = coms.deadlineAt;
+        deadlineData.textContent = deadlineDateCleaned;
         statusData.textContent = coms.status;
+        createdData.textContent = createdDateCleaned;
+        updatedData.textContent = updatedDateCleaned;
 
         const actions = document.createElement("div");
         actions.classList.add("actions");
@@ -73,10 +86,13 @@ async function getCommissionList(currentPage){
                     addressData,
                     deadlineData,
                     statusData,
+                    createdData,
+                    updatedData,
                     actionsData
         );
 
         tableContent.appendChild(tr);
+        commissionNumber++;
     });
 }
 

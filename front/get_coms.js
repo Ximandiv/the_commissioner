@@ -1,8 +1,9 @@
+import { deleteCommission } from './delete_com.js';
+
 let currentPage = 1;
 let totalPages = 1;
 document.addEventListener("DOMContentLoaded", async function(){
     await pollCommissions(currentPage);
-    setInterval(pollCommissions(currentPage), 5 * 60 * 1000)
 
     document.getElementById("prevPage").addEventListener("click", async () => {
         if (currentPage > 1) {
@@ -30,7 +31,7 @@ export async function pollCommissions(currentPage){
 }
 
 async function getCommissionList(currentPage){
-    const pageSize = 3;
+    const pageSize = 6;
     const tableContent = document.querySelector("table tbody");
     const commissionList = await getFromAPI(currentPage, pageSize);
     console.log(commissionList);
@@ -92,6 +93,11 @@ async function getCommissionList(currentPage){
         );
 
         tableContent.appendChild(tr);
+
+        buttonDelete.addEventListener("click", async function(){
+            await deleteCommission(coms.id, tr);
+            await pollCommissions(currentPage);
+        });
         commissionNumber++;
     });
 }

@@ -20,6 +20,37 @@ public class CommissionController : ControllerBase
         _context = context;
     }
 
+    [HttpPost]
+    public IActionResult CreateCommission([FromBody] CommissionRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Name))
+            return BadRequest("Commission name cannot be empty.");
+        else if (request.Name.Length >= 100)
+            return BadRequest("Commission name cannot be or exceed 100 characters.");
+
+        var deadlineDate = DateOnly.TryParseExact(request.DeadlineAt,
+                                                  "yyyy-MM-dd",
+                                                  CultureInfo.InvariantCulture,
+                                                  DateTimeStyles.None,
+                                                  out var parsedDate)
+                            ? parsedDate
+                            : DateOnly.MinValue;
+        if (deadlineDate <= DateOnly.FromDateTime(DateTime.UtcNow)
+            || deadlineDate == DateOnly.MinValue)
+            return BadRequest("Deadline cannot be in same day or past.");
+
+        var commission = new Commission(request);
+
+        _context.Commissions.Add(commission);
+        _context.SaveChanges();
+
+        _logger.LogInformation("Commission created: {CommissionId}", commission.Id);
+
+        var response = new CommissionResponse(commission);
+
+        return CreatedAtAction(nameof(GetCommissions), new { id = commission.Id }, response);
+    }
+
     [HttpGet]
     public IActionResult GetCommissions(int pageNumber = 1, int pageSize = 10)
     {
@@ -49,33 +80,18 @@ public class CommissionController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost]
-    public IActionResult CreateCommission([FromBody] CommissionRequest request)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCommission(string id)
     {
-        if(string.IsNullOrEmpty(request.Name))
-            return BadRequest("Commission name cannot be empty.");
-        else if(request.Name.Length >= 100)
-            return BadRequest("Commission name cannot be or exceed 100 characters.");
+        var idGuid = Guid.TryParse(id, out var parsedId) ? parsedId : Guid.Empty;
+        var commission = _context.Commissions.Find(idGuid);
+        if (commission == null)
+            return NotFound("Commission not found.");
 
-        var deadlineDate = DateOnly.TryParseExact(request.DeadlineAt,
-                                                  "yyyy-MM-dd",
-                                                  CultureInfo.InvariantCulture,
-                                                  DateTimeStyles.None,
-                                                  out var parsedDate)
-                            ? parsedDate
-                            : DateOnly.MinValue;
-        if (deadlineDate <= DateOnly.FromDateTime(DateTime.UtcNow)
-            || deadlineDate == DateOnly.MinValue)
-            return BadRequest("Deadline cannot be in same day or past.");
-
-        var commission = new Commission(request);
-
-        _context.Commissions.Add(commission);
+        _context.Commissions.Remove(commission);
         _context.SaveChanges();
-        _logger.LogInformation("Commission created: {CommissionId}", commission.Id);
 
-        var response = new CommissionResponse(commission);
-
-        return CreatedAtAction(nameof(GetCommissions), new { id = commission.Id }, response);
+        _logger.LogInformation("Commission deleted: {CommissionId}", id);
+        return NoContent();
     }
 }

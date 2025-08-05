@@ -1,34 +1,44 @@
 import { pollCommissions } from './get_coms.js';
+import { ModalPopup } from './modal.js';
+import { CreateForm } from './create_com_form.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const modal = document.getElementById('myModal');
+    const modalPopup = new ModalPopup();
+    modalPopup.modal.id = "myModal";
 
+    const createFormModel = new CreateForm();
+    modalPopup.appendContent(createFormModel.content);
+
+    document.body.append(modalPopup.modal);
+
+    // Gets the button to create
     const openBtn = document.getElementById('create');
 
-    const closeBtn = document.getElementsByClassName('close')[0];
+    // Gets the modal button to close
+    const closeBtn = modalPopup.modal.querySelector(".close");
 
-    const creationForm = modal.querySelector(".modal-content #create-form");
-    const nameError = creationForm.querySelector("#name-errors");
-    const dateError = creationForm.querySelector("#date-errors");
-    const addressError = creationForm.querySelector("#address-errors");
+    const form = createFormModel.content.querySelector("#create-form");
+    const nameError = form.querySelector("#name-errors");
+    const dateError = form.querySelector("#date-errors");
+    const addressError = form.querySelector("#address-errors");
 
-    const comName = creationForm.querySelector("#name");
-    const comDate = creationForm.querySelector("#deadline");
-    const comAddress = creationForm.querySelector("#address");
+    const comName = form.querySelector("#name");
+    const comDate = form.querySelector("#deadline");
+    const comAddress = form.querySelector("#address");
 
-    const confirmCreation = creationForm.querySelector("button");
+    const confirmCreation = form.querySelector("button");
 
     openBtn.onclick = function() {
-        modal.style.display = 'block';
+        modalPopup.display();
     }
 
     closeBtn.onclick = function() {
-        modal.style.display = 'none';
+        modalPopup.close();
     }
 
     window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
+        if (event.target === modalPopup.modal) {
+            modalPopup.close();
         }
     }
 
@@ -83,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await pollCommissions();
 
-        modal.style.display = 'none';
+        modalPopup.style.display = 'none';
     }
 
     async function sendToAPI(name, deadline, address) {

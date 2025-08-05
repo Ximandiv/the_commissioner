@@ -1,4 +1,4 @@
-class ModalPopup{
+export class ModalPopup{
     constructor(){
         this.modal = document.createElement("div");
         this.modal.classList.add("modal");
@@ -8,10 +8,11 @@ class ModalPopup{
         this.content.classList.add("modal-content");
 
         const closeButton = document.createElement("span");
-        closeButton.textContent = "&times;";
+        closeButton.textContent = "×";
         closeButton.classList.add("close");
 
-        this.modal.appendChild(closeButton);
+        this.content.append(closeButton);
+        this.modal.append(this.content);
     }
 
     display(){
@@ -23,6 +24,6 @@ class ModalPopup{
     }
 
     appendContent(data){
-        this.content.appendChild(data);
+        this.content.append(data);
     }
 }

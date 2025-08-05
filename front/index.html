@@ -82,28 +82,6 @@
             <button id="nextPage">></button>
         </div>
 
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3>Crear Comision</h3>
-                <form id="create-form">
-                    <label for="name">Nombre de Comision</label>
-                    <input type="text" name="name" id="name">
-                    <span id="name-errors" style="color: red;"></span>
-
-                    <label for="address" autocomplete="street-address">Direccion de Entrega</label>
-                    <input type="text" name="address" id="address">
-                    <span id="address-errors" style="color: red;"></span>
-
-                    <label for="deadline">Fecha de Entrega</label>
-                    <input type="date" name="deadline" id="deadline">
-                    <span id="date-errors" style="color: red;"></span>
-
-                    <button type="submit">Confirmar</button>
-                </form>
-            </div>
-        </div>
-
         <table>
             <thead>
                 <tr>
@@ -127,6 +105,8 @@
 
 <script src="header_script.js"></script>
 <script src="filter_icon.js"></script>
+<script type="module" src="modal.js"></script>
+<script type="module" src="create_com_form.js"></script>
 <script type="module" src="table.js"></script>
 <script type="module" src="tableData.js"></script>
 <script type="module" src="delete_com.js"></script>

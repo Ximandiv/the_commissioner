@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using NodaTime;
 using NodaTime.TimeZones;
 using System.Globalization;
@@ -13,13 +14,17 @@ public class CommissionController : ControllerBase
 {
     private readonly ILogger<CommissionController> _logger;
     private readonly CommissionContext _context;
+    private readonly IMemoryCache _cache;
+    private const string CACHE_KEY_PREFIX = "Commissions_";
 
     public CommissionController(
         ILogger<CommissionController> logger,
-        CommissionContext context)
+        CommissionContext context,
+        IMemoryCache cache)
     {
         _logger = logger;
         _context = context;
+        _cache = cache;
     }
 
     [HttpPost]
@@ -85,6 +90,14 @@ public class CommissionController : ControllerBase
 
         var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
+        var cacheKey = $"{CACHE_KEY_PREFIX}_{pageNumber}_{pageSize}";
+        if (_cache.TryGetValue(cacheKey, out CommissionListResponse? cachedResponse)
+            && cachedResponse is not null)
+        {
+            _logger.LogInformation("Returning cached response for page {PageNumber}, size {PageSize}", pageNumber, pageSize);
+            return Ok(cachedResponse);
+        }
+
         var commissions = _context.Commissions
             .OrderBy(c => c.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
@@ -98,6 +111,8 @@ public class CommissionController : ControllerBase
             pageSize,
             totalPages,
             commissions);
+
+        _cache.Set(cacheKey, response, TimeSpan.FromMinutes(5));
 
         return Ok(response);
     }

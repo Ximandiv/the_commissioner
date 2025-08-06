@@ -1,6 +1,7 @@
 export class CreateForm{
     constructor(){
         this.content = document.createElement("div");
+        this.content.id = "create-div";
 
         const title = document.createElement("h3");
         title.textContent = "Crear Comisión";

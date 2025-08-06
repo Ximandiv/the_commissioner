@@ -1,4 +1,9 @@
+import { sendCreateToAPI } from "./create_com.js";
+
 export class CreateForm{
+    #inputName; #errorName; 
+    #inputAddress; #errorAddress; 
+    #inputDeadline; #errorDeadline;
     constructor(){
         this.content = document.createElement("div");
         this.content.id = "create-div";
@@ -13,53 +18,105 @@ export class CreateForm{
         labelName.htmlFor = "name";
         labelName.textContent = "Nombre";
 
-        const inputName = document.createElement("input");
-        inputName.type = "text";
-        inputName.name = "name";
-        inputName.id = "name";
-        inputName.placeholder = "Dibujo Realista...";
+        this.#inputName = document.createElement("input");
+        this.#inputName.type = "text";
+        this.#inputName.name = "name";
+        this.#inputName.id = "name";
+        this.#inputName.placeholder = "Dibujo Realista...";
 
-        const errorName = document.createElement("span");
-        errorName.id = "name-errors";
-        errorName.style.color = "red";
+        this.#errorName = document.createElement("span");
+        this.#errorName.id = "name-errors";
+        this.#errorName.style.color = "red";
 
         const labelAddress = document.createElement("label");
         labelAddress.htmlFor = "address";
         labelAddress.textContent = "Dirección Entrega";
 
-        const inputAddress = document.createElement("input");
-        inputAddress.type = "text";
-        inputAddress.name = "address";
-        inputAddress.id = "address";
-        inputAddress.placeholder = "Por la placita de flores en...";
+        this.#inputAddress = document.createElement("input");
+        this.#inputAddress.type = "text";
+        this.#inputAddress.name = "address";
+        this.#inputAddress.id = "address";
+        this.#inputAddress.placeholder = "Por la placita de flores en...";
 
-        const errorAddress = document.createElement("span");
-        errorAddress.id = "address-errors";
-        errorAddress.style.color = "red";
+        this.#errorAddress = document.createElement("span");
+        this.#errorAddress.id = "address-errors";
+        this.#errorAddress.style.color = "red";
 
         const labelDeadline = document.createElement("label");
         labelDeadline.htmlFor = "deadline";
         labelDeadline.textContent = "Fecha Entrega";
 
-        const inputDeadline = document.createElement("input");
-        inputDeadline.type = "date";
-        inputDeadline.name = "deadline";
-        inputDeadline.id = "deadline";
+        this.#inputDeadline = document.createElement("input");
+        this.#inputDeadline.type = "date";
+        this.#inputDeadline.name = "deadline";
+        this.#inputDeadline.id = "deadline";
 
-        const errorDeadline = document.createElement("span");
-        errorDeadline.id = "date-errors";
-        errorDeadline.style.color = "red";
+        this.#errorDeadline = document.createElement("span");
+        this.#errorDeadline.id = "date-errors";
+        this.#errorDeadline.style.color = "red";
 
         const submitBtn = document.createElement("button");
         submitBtn.type = "submit";
         submitBtn.textContent = "Confirmar";
 
-        form.append(labelName, inputName, errorName,
-                    labelAddress, inputAddress, errorAddress,
-                    labelDeadline, inputDeadline, errorDeadline,
+        form.append(labelName, this.#inputName, this.#errorName,
+                    labelAddress, this.#inputAddress, this.#errorAddress,
+                    labelDeadline, this.#inputDeadline, this.#errorDeadline,
                     submitBtn
         );
 
         this.content.append(title, form);
+
+        form.addEventListener("submit", async (e) => await this.#validateData(e));
+    }
+
+    async #validateData(e){
+        e.preventDefault();
+
+        this.#errorName.textContent = "";
+        this.#errorDeadline.textContent = "";
+        this.#errorAddress.textContent = "";
+
+        const comNameValue = this.#inputName.value.trim();
+        const comDateValue = this.#inputDeadline.value;
+        const comAddressValue = this.#inputAddress.value;
+        let errorsFound = false;
+
+        if(comNameValue.length >= 100 || comNameValue.length === 0){
+            this.#errorName.textContent = "Nombre no puede ser igual o mayor a 100 caracteres ni estar vacio";
+            errorsFound = true;
+        }
+
+        if(comAddressValue.length >= 60 || comAddressValue.length === 0){
+            this.#errorAddress.textContent = "Direccion no puede ser vacia o ser mayor o igual a 60 caracteres";
+            errorsFound = true;
+        }
+
+        if(!comDateValue){
+            this.#errorDeadline.textContent = "Fecha no puede ser vacia";
+            errorsFound = true;
+        }
+
+        const [year, month, day] = comDateValue.split('-');
+        const selectedDate = new Date(year, month - 1, day);
+        const today = new Date();
+        
+        selectedDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate <= today) {
+            if(dateError.textContent.length === 0){
+                this.#errorDeadline.textContent = "Fecha no puede ser hoy o en el pasado";
+            }else{
+                this.#errorDeadline += " y no puede ser hoy o en el pasado";
+            }
+            errorsFound = true;
+        }
+
+        if(errorsFound === true){
+            return;
+        }
+        
+        await sendCreateToAPI(comNameValue, comAddressValue, comDateValue);
     }
 }

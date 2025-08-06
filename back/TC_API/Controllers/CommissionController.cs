@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NodaTime;
+using NodaTime.TimeZones;
 using System.Globalization;
 using TC_API.Database;
 using TC_API.Models;
@@ -35,9 +37,29 @@ public class CommissionController : ControllerBase
                                                   out var parsedDate)
                             ? parsedDate
                             : DateOnly.MinValue;
-        if (deadlineDate <= DateOnly.FromDateTime(DateTime.UtcNow)
-            || deadlineDate == DateOnly.MinValue)
-            return BadRequest("Deadline cannot be in same day or past.");
+
+        if (deadlineDate == DateOnly.MinValue)
+            return BadRequest("Invalid deadline date");
+
+        try
+        {
+            var dateTimeZone = DateTimeZoneProviders.Tzdb[request.Timezone];
+
+            // Get current time in the CLIENT's timezone
+            var nowInClientZone = SystemClock.Instance.GetCurrentInstant().InZone(dateTimeZone);
+            var todayInClientZone = nowInClientZone.Date;
+
+            // Convert DateOnly to LocalDate for comparison
+            var deadlineLocalDate = new LocalDate(deadlineDate.Year, deadlineDate.Month, deadlineDate.Day);
+
+            // Now you can compare LocalDate with LocalDate
+            if (deadlineLocalDate <= todayInClientZone)
+                return BadRequest("Deadline cannot be in same day or past.");
+        }
+        catch (DateTimeZoneNotFoundException)
+        {
+            return BadRequest("Invalid timezone.");
+        }
 
         var commission = new Commission(request);
 

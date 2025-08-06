@@ -5,6 +5,7 @@ public class CommissionRequest
     public string Name { get; set; } = string.Empty;
     public string DeliveryAddress { get; set; } = string.Empty;
     public string DeadlineAt { get; set; } = string.Empty;
+    public string Timezone { get; set; } = string.Empty;
 
     public CommissionRequest()
     {

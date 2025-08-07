@@ -16,10 +16,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-export async function sendCreateToAPI(name, address, deadline) {
+export async function sendCreateToAPI(clientName,
+                                    name,
+                                    address,
+                                    price,
+                                    currency,
+                                    deadline) {
     const payload = {
+        clientName: clientName,
         name: name,
         deliveryAddress: address,
+        price: price,
+        currency: currency,
         deadlineAt: deadline,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     };

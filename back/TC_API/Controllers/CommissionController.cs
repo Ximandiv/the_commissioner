@@ -30,10 +30,21 @@ public class CommissionController : ControllerBase
     [HttpPost]
     public IActionResult CreateCommission([FromBody] CommissionRequest request)
     {
+        if (string.IsNullOrEmpty(request.ClientName))
+            return BadRequest("Commission name cannot be empty.");
+        else if (request.ClientName.Length >= 50)
+            return BadRequest("Commission client name cannot be or exceed 50 characters.");
+
         if (string.IsNullOrEmpty(request.Name))
             return BadRequest("Commission name cannot be empty.");
         else if (request.Name.Length >= 100)
             return BadRequest("Commission name cannot be or exceed 100 characters.");
+
+        if (request.Price < 0)
+            return BadRequest("Commission price cannot be negative");
+
+        if (request.Currency.Length <= 0 || request.Currency.Length > 3)
+            return BadRequest("Commission currency must not be empty nor have more than 3 characters");
 
         var deadlineDate = DateOnly.TryParseExact(request.DeadlineAt,
                                                   "yyyy-MM-dd",
@@ -90,13 +101,15 @@ public class CommissionController : ControllerBase
 
         var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-        var cacheKey = $"{CACHE_KEY_PREFIX}_{pageNumber}_{pageSize}";
-        if (_cache.TryGetValue(cacheKey, out CommissionListResponse? cachedResponse)
-            && cachedResponse is not null)
-        {
-            _logger.LogInformation("Returning cached response for page {PageNumber}, size {PageSize}", pageNumber, pageSize);
-            return Ok(cachedResponse);
-        }
+        // Commented while user-coms relation is finished to employ strategy according to CRUD actions
+
+        //var cacheKey = $"{CACHE_KEY_PREFIX}_{pageNumber}_{pageSize}";
+        //if (_cache.TryGetValue(cacheKey, out CommissionListResponse? cachedResponse)
+        //    && cachedResponse is not null)
+        //{
+        //    _logger.LogInformation("Returning cached response for page {PageNumber}, size {PageSize}", pageNumber, pageSize);
+        //    return Ok(cachedResponse);
+        //}
 
         var commissions = _context.Commissions
             .OrderBy(c => c.CreatedAt)
@@ -112,7 +125,7 @@ public class CommissionController : ControllerBase
             totalPages,
             commissions);
 
-        _cache.Set(cacheKey, response, TimeSpan.FromMinutes(5));
+        //_cache.Set(cacheKey, response, TimeSpan.FromMinutes(5));
 
         return Ok(response);
     }

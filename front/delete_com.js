@@ -1,4 +1,4 @@
-export async function deleteCommission(id, tr){
+export async function deleteCommission(id){
     const response = await fetch(`https://localhost:7117/Commission/${id}`, {
         method: 'DELETE',
         headers: {
@@ -11,6 +11,4 @@ export async function deleteCommission(id, tr){
     }
 
     console.log("Yay you removed a commission");
-
-    tr.remove();
 }

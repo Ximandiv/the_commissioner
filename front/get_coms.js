@@ -42,6 +42,9 @@ async function getCommissionList(currentPage, tableContent){
 
     const pageSize = 3;
     const commissionList = await getFromAPI(currentPage, pageSize);
+    if(!commissionList)
+        return;
+
     totalPages = commissionList.totalPages;
 
     // Formula that calculates the # of item that represents according to page and page size
@@ -70,6 +73,6 @@ async function getFromAPI(currentPage, pageSize){
         return response.json();
     } catch(error){
         console.error(error);
-        return;
+        return false;
     }
 }

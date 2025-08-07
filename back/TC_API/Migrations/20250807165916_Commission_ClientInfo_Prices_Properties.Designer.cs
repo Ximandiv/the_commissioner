@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TC_API.Database;
@@ -11,9 +12,11 @@ using TC_API.Database;
 namespace TC_API.Migrations
 {
     [DbContext(typeof(CommissionContext))]
-    partial class CommissionContextModelSnapshot : ModelSnapshot
+    [Migration("20250807165916_Commission_ClientInfo_Prices_Properties")]
+    partial class Commission_ClientInfo_Prices_Properties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

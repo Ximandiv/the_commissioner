@@ -87,6 +87,7 @@ export class CreateForm{
         this.#inputCurrency.type = "text";
         this.#inputCurrency.name = "currency";
         this.#inputCurrency.id = "currency";
+        this.#inputCurrency.placeholder = "USD";
         this.#inputCurrency.required = true;
 
         this.#errorCurrency = document.createElement("span");

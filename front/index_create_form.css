@@ -45,3 +45,15 @@
 #create-form button:hover{
     background-color: #005B5B;
 }
+
+#form-container-one, #form-container-two, #form-container-three{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+#form-container-one div, #form-container-two div, #form-container-three div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

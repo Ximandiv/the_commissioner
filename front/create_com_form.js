@@ -17,6 +17,9 @@ export class CreateForm{
         const form = document.createElement("form");
         form.id = "create-form";
 
+        const nameContainer = document.createElement("div");
+        nameContainer.id = "name-container";
+
         const labelName = document.createElement("label");
         labelName.htmlFor = "name";
         labelName.textContent = "Nombre";
@@ -31,6 +34,11 @@ export class CreateForm{
         this.#errorName = document.createElement("span");
         this.#errorName.id = "name-errors";
         this.#errorName.style.color = "red";
+
+        nameContainer.append(labelName, this.#inputName, this.#errorName);
+
+        const clientNameContainer = document.createElement("div");
+        clientNameContainer.id = "client-name-container";
 
         const labelClientName = document.createElement("label");
         labelClientName.htmlFor = "client-name";
@@ -47,6 +55,11 @@ export class CreateForm{
         this.#errorClientName.id = "client-name-errors";
         this.#errorClientName.style.color = "red";
 
+        clientNameContainer.append(labelClientName, this.#inputClientName, this.#errorClientName);
+
+        const addressContainer = document.createElement("div");
+        addressContainer.id = "address-container";
+
         const labelAddress = document.createElement("label");
         labelAddress.htmlFor = "address";
         labelAddress.textContent = "Dirección Entrega";
@@ -61,6 +74,11 @@ export class CreateForm{
         this.#errorAddress = document.createElement("span");
         this.#errorAddress.id = "address-errors";
         this.#errorAddress.style.color = "red";
+
+        addressContainer.append(labelAddress, this.#inputAddress, this.#errorAddress);
+
+        const priceContainer = document.createElement("div");
+        priceContainer.id = "price-container";
 
         const labelPrice = document.createElement("label");
         labelPrice.htmlFor = "price";
@@ -79,6 +97,11 @@ export class CreateForm{
         this.#errorPrice.id = "price-errors";
         this.#errorPrice.style.color = "red";
 
+        priceContainer.append(labelPrice, this.#inputPrice, this.#errorPrice);
+
+        const currencyContainer = document.createElement("div");
+        currencyContainer.id = "currency-container";
+
         const labelCurrency = document.createElement("label");
         labelCurrency.htmlFor = "currency";
         labelCurrency.textContent = "Moneda";
@@ -94,6 +117,11 @@ export class CreateForm{
         this.#errorCurrency.id = "currency-errors";
         this.#errorCurrency.style.color = "red";
 
+        currencyContainer.append(labelCurrency, this.#inputCurrency, this.#errorCurrency);
+
+        const deadlineContainer = document.createElement("div");
+        deadlineContainer.id = "deadline-currency";
+
         const labelDeadline = document.createElement("label");
         labelDeadline.htmlFor = "deadline";
         labelDeadline.textContent = "Fecha Entrega";
@@ -108,16 +136,28 @@ export class CreateForm{
         this.#errorDeadline.id = "date-errors";
         this.#errorDeadline.style.color = "red";
 
+        deadlineContainer.append(labelDeadline, this.#inputDeadline, this.#errorDeadline);
+
         const submitBtn = document.createElement("button");
         submitBtn.type = "submit";
         submitBtn.textContent = "Confirmar";
 
-        form.append(labelClientName, this.#inputClientName, this.#errorClientName,
-                    labelName, this.#inputName, this.#errorName,
-                    labelAddress, this.#inputAddress, this.#errorAddress,
-                    labelPrice, this.#inputPrice, this.#errorPrice,
-                    labelCurrency, this.#inputCurrency, this.#errorCurrency,
-                    labelDeadline, this.#inputDeadline, this.#errorDeadline,
+        const formContainerOne = document.createElement("div");
+        formContainerOne.id = "form-container-one";
+
+        const formContainerTwo = document.createElement("div");
+        formContainerTwo.id = "form-container-two";
+
+        const formContainerThree = document.createElement("div");
+        formContainerThree.id = "form-container-three";
+
+        formContainerOne.append(clientNameContainer, nameContainer);
+        formContainerTwo.append(addressContainer, priceContainer);
+        formContainerThree.append(currencyContainer, deadlineContainer);
+
+        form.append(formContainerOne,
+                    formContainerTwo,
+                    formContainerThree,
                     submitBtn
         );
 

@@ -56,3 +56,37 @@ tbody tr:last-child td:first-child {
 tbody tr:last-child td:last-child {
   border-bottom-right-radius: 19px;
 }
+
+.status{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  height: 50px;
+}
+
+.created {
+  background-color: rgb(153, 204, 255);
+}
+
+.progress {
+  background-color: rgb(255, 221, 102);
+}
+
+.complete {
+  background-color: rgb(144, 238, 144);
+}
+
+.canceled {
+  background-color: rgb(211, 211, 211);
+}
+
+.failed {
+  background-color: rgb(255, 153, 153);
+}
+
+.hold {
+  background-color: rgb(255, 182, 102);
+}
+

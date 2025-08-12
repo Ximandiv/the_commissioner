@@ -11,6 +11,7 @@ export class TableData{
         const priceData = document.createElement("td");
         const deadlineData = document.createElement("td");
         const statusData = document.createElement("td");
+        const statusContainer = document.createElement("div");
         const actionsData = document.createElement("td");
 
         const deadlineDateRaw = new Date(coms.deadlineAt);
@@ -22,7 +23,23 @@ export class TableData{
         nameData.textContent = coms.name;
         priceData.textContent = `${coms.currency} $${coms.price}`;
         deadlineData.textContent = deadlineDate;
-        statusData.textContent = coms.status;
+        statusContainer.textContent = coms.status;
+
+        statusContainer.classList.add("status");
+        if(coms.status === "Creado")
+            statusContainer.classList.add("created");
+        else if(coms.status === "En Progreso")
+            statusContainer.classList.add("progress");
+        else if(coms.status === "Completado")
+            statusContainer.classList.add("complete");
+        else if(coms.status === "Cancelado")
+            statusContainer.classList.add("canceled");
+        else if(coms.status === "Fallido")
+            statusContainer.classList.add("failed");
+        else if(coms.status === "En Espera")
+            statusContainer.classList.add("hold");
+
+        statusData.append(statusContainer);
 
         const actions = document.createElement("div");
         actions.classList.add("actions");

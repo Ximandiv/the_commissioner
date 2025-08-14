@@ -8,6 +8,7 @@ public enum CommissionStateEnum
     Cancelled = 3,
     Failed = 4,
     On_Hold = 5,
+    Late = 6,
     Completed = 6,
     Unknown = 7
 }

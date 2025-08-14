@@ -28,6 +28,7 @@ public class CommissionResponse
             "Cancelled" => "Cancelado",
             "Failed" => "Fallido",
             "On Hold" => "En Espera",
+            "Late" => "Atrasado",
             _ => stateString
         };
 

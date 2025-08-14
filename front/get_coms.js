@@ -59,7 +59,8 @@ async function getCommissionList(currentPage, tableContent){
 
 async function getFromAPI(currentPage, pageSize){
     try{
-        const response = await fetch(`https://localhost:7117/Commission?pageNumber=${currentPage}&pageSize=${pageSize}`, {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        const response = await fetch(`https://localhost:7117/Commission?timezone=${timezone}&pageNumber=${currentPage}&pageSize=${pageSize}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

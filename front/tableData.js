@@ -1,9 +1,17 @@
 import { deleteCommission } from "./delete_com.js";
+import { CommissionDetails } from "./details_com.js";
 import { pollCommissions } from "./get_coms.js";
+import { ModalPopup } from "./modal.js";
 
 export class TableData{
     constructor(coms, commissionNumber, currentPage){
         this.row = document.createElement("tr");
+
+        this.commissionDetails = new CommissionDetails(coms);
+
+        this.detailModal = new ModalPopup();
+        this.detailModal.appendContent(this.commissionDetails.container);
+        document.body.append(this.detailModal.modal);
 
         const idData = document.createElement("td");
         const clientNameData = document.createElement("td");
@@ -14,9 +22,7 @@ export class TableData{
         const statusContainer = document.createElement("div");
         const actionsData = document.createElement("td");
 
-        const deadlineDateRaw = new Date(coms.deadlineAt);
-
-        const deadlineDate = this.#cleanDate(deadlineDateRaw);
+        const deadlineDate = this.#cleanDate(coms.deadlineAt);
 
         idData.textContent = commissionNumber;
         clientNameData.textContent = coms.clientName;
@@ -38,6 +44,8 @@ export class TableData{
             statusContainer.classList.add("failed");
         else if(coms.status === "En Espera")
             statusContainer.classList.add("hold");
+        else if(coms.status === "Atrasado")
+            statusContainer.classList.add("late");
 
         statusData.append(statusContainer);
 
@@ -72,9 +80,14 @@ export class TableData{
             await deleteCommission(coms.id);
             await pollCommissions(currentPage);
         });
+        buttonDetails.addEventListener("click", () => {
+            this.detailModal.display();
+        });
     }
 
-    #cleanDate(date){
-        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    #cleanDate(dateString){
+        const datePart = dateString.split('T')[0];
+        const [year, month, day] = datePart.split('-');
+        return `${parseInt(month)}/${parseInt(day)}/${year}`;
     }
 }

@@ -86,6 +86,10 @@ tbody tr:last-child td:last-child {
   background-color: rgb(255, 153, 153);
 }
 
+.late{
+  background-color: rgb(255, 184, 157);
+}
+
 .hold {
   background-color: rgb(255, 182, 102);
 }

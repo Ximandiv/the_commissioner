@@ -27,4 +27,17 @@ public class Commission
         Currency = req.Currency;
         DeadlineAt = req.DeadlineAt;
     }
+
+    public void Update(CommissionRequest req, bool isLate)
+    {
+        ClientName = string.IsNullOrEmpty(req.ClientName) ? ClientName : req.ClientName;
+        Name = string.IsNullOrEmpty(req.Name) ? Name : req.Name;
+        DeliveryAddress = string.IsNullOrEmpty(req.DeliveryAddress) ? DeliveryAddress : req.DeliveryAddress;
+        Price = req.Price <= 0 ? Price : req.Price;
+        Currency = string.IsNullOrEmpty(req.Currency) ? Currency : req.Currency;
+        DeadlineAt = string.IsNullOrEmpty(req.DeadlineAt) ? DeadlineAt : req.DeadlineAt;
+
+        State = isLate ? CommissionStateEnum.Late 
+            : Enum.TryParse<CommissionStateEnum>(req.State, true, out var state) ? state : State;
+    }
 }
